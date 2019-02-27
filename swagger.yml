@@ -67,7 +67,7 @@ paths:
         required: true
     put:
       tags:
-        - todos
+        - daily
       operationId: updateOne
       parameters:
         - name: body
@@ -85,7 +85,7 @@ paths:
             $ref: "#/definitions/error"
     delete:
       tags:
-        - todos
+        - daily
       operationId: destroyOne
       responses:
         204:
