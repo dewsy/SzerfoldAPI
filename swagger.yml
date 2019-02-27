@@ -129,3 +129,5 @@ definitions:
         format: int64
       message:
         type: string
+  principal:
+    type: string
