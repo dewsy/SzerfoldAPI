@@ -6,6 +6,18 @@ info:
 schemes:
 - http
 - https
+basePath: /api
+consumes:
+  - application/keyauth.api.v1+json
+produces:
+  - application/keyauth.api.v1+json
+securityDefinitions:
+  key:
+    type: apiKey
+    in: header
+    name: x-token
+security:
+  - key: []
 paths:
   /:
     get:
@@ -88,6 +100,8 @@ definitions:
     required:
       - message
       - verse
+      - pray
+      - title
     properties:
       id:
         type: integer
@@ -97,6 +111,12 @@ definitions:
         type: string
         minLength: 1
       verse:
+        type: string
+        minLength: 1
+      pray:
+        type: string
+        minLength: 1
+      title:
         type: string
         minLength: 1
   error:
