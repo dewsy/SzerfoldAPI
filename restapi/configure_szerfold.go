@@ -3,6 +3,7 @@
 package restapi
 
 import (
+	"SzerfoldAPI/own_code"
 	"crypto/tls"
 	"net/http"
 
@@ -39,7 +40,8 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 
 	// Applies when the "x-token" header is set
 	api.KeyAuth = func(token string) (*models.Principal, error) {
-		if token == "alma" {
+		conf := own_code.ReadConfiguration()
+		if token == conf["Xtoken"] {
 			principal := models.Principal(token)
 			return &principal, nil
 		} else {
