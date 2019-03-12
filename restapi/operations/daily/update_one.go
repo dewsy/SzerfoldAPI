@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "SzerfoldAPI/models"
 )
 
 // UpdateOneHandlerFunc turns a function with the right signature into a update one handler
-type UpdateOneHandlerFunc func(UpdateOneParams, interface{}) middleware.Responder
+type UpdateOneHandlerFunc func(UpdateOneParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdateOneHandlerFunc) Handle(params UpdateOneParams, principal interface{}) middleware.Responder {
+func (fn UpdateOneHandlerFunc) Handle(params UpdateOneParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // UpdateOneHandler interface for that can handle valid update one params
 type UpdateOneHandler interface {
-	Handle(UpdateOneParams, interface{}) middleware.Responder
+	Handle(UpdateOneParams, *models.Principal) middleware.Responder
 }
 
 // NewUpdateOne creates a new http.Handler for the update one operation
@@ -54,9 +56,9 @@ func (o *UpdateOne) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

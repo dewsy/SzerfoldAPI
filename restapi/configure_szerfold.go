@@ -12,9 +12,12 @@ import (
 
 	"SzerfoldAPI/restapi/operations"
 	"SzerfoldAPI/restapi/operations/daily"
+
+	models "SzerfoldAPI/models"
 )
 
-//go:generate swagger generate server --target ../../SzerfoldAPI --name Szerfold --spec ../swagger.yml
+//go:generate swagger generate server --target ../../SzerfoldAPI --name Szerfold --spec ../swagger.yml --principal models.Principal
+// swagger generate server -A SzerfoldAPI -P models.Principal -f ./swagger.yml
 
 func configureFlags(api *operations.SzerfoldAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -35,8 +38,13 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 	api.JSONProducer = runtime.JSONProducer()
 
 	// Applies when the "x-token" header is set
-	api.KeyAuth = func(token string) (interface{}, error) {
-		return nil, errors.NotImplemented("api key auth (key) x-token from header param [x-token] has not yet been implemented")
+	api.KeyAuth = func(token string) (*models.Principal, error) {
+		if token == "alma" {
+			principal := models.Principal(token)
+			return &principal, nil
+		} else {
+			return nil, errors.New(401, "You shall not pass!")
+		}
 	}
 
 	// Set your custom authorizer if needed. Default one is security.Authorized()
@@ -44,16 +52,16 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 	//
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
-	api.DailyAddOneHandler = daily.AddOneHandlerFunc(func(params daily.AddOneParams, principal interface{}) middleware.Responder {
+	api.DailyAddOneHandler = daily.AddOneHandlerFunc(func(params daily.AddOneParams, principal *models.Principal) middleware.Responder {
 		return middleware.NotImplemented("operation daily.AddOne has not yet been implemented")
 	})
-	api.DailyDestroyOneHandler = daily.DestroyOneHandlerFunc(func(params daily.DestroyOneParams, principal interface{}) middleware.Responder {
+	api.DailyDestroyOneHandler = daily.DestroyOneHandlerFunc(func(params daily.DestroyOneParams, principal *models.Principal) middleware.Responder {
 		return middleware.NotImplemented("operation daily.DestroyOne has not yet been implemented")
 	})
 	api.DailyGetDailyHandler = daily.GetDailyHandlerFunc(func(params daily.GetDailyParams) middleware.Responder {
 		return middleware.NotImplemented("operation daily.GetDaily has not yet been implemented")
 	})
-	api.DailyUpdateOneHandler = daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal interface{}) middleware.Responder {
+	api.DailyUpdateOneHandler = daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal *models.Principal) middleware.Responder {
 		return middleware.NotImplemented("operation daily.UpdateOne has not yet been implemented")
 	})
 

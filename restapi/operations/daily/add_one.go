@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "SzerfoldAPI/models"
 )
 
 // AddOneHandlerFunc turns a function with the right signature into a add one handler
-type AddOneHandlerFunc func(AddOneParams, interface{}) middleware.Responder
+type AddOneHandlerFunc func(AddOneParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn AddOneHandlerFunc) Handle(params AddOneParams, principal interface{}) middleware.Responder {
+func (fn AddOneHandlerFunc) Handle(params AddOneParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // AddOneHandler interface for that can handle valid add one params
 type AddOneHandler interface {
-	Handle(AddOneParams, interface{}) middleware.Responder
+	Handle(AddOneParams, *models.Principal) middleware.Responder
 }
 
 // NewAddOne creates a new http.Handler for the add one operation
@@ -54,9 +56,9 @@ func (o *AddOne) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

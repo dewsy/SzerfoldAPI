@@ -226,6 +226,9 @@ func init() {
           "type": "string"
         }
       }
+    },
+    "principal": {
+      "type": "string"
     }
   },
   "securityDefinitions": {
@@ -445,6 +448,9 @@ func init() {
           "type": "string"
         }
       }
+    },
+    "principal": {
+      "type": "string"
     }
   },
   "securityDefinitions": {

@@ -20,6 +20,8 @@ import (
 	"github.com/go-openapi/swag"
 
 	"SzerfoldAPI/restapi/operations/daily"
+
+	models "SzerfoldAPI/models"
 )
 
 // NewSzerfoldAPI creates a new Szerfold instance
@@ -39,21 +41,21 @@ func NewSzerfoldAPI(spec *loads.Document) *SzerfoldAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		DailyAddOneHandler: daily.AddOneHandlerFunc(func(params daily.AddOneParams, principal interface{}) middleware.Responder {
+		DailyAddOneHandler: daily.AddOneHandlerFunc(func(params daily.AddOneParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation DailyAddOne has not yet been implemented")
 		}),
-		DailyDestroyOneHandler: daily.DestroyOneHandlerFunc(func(params daily.DestroyOneParams, principal interface{}) middleware.Responder {
+		DailyDestroyOneHandler: daily.DestroyOneHandlerFunc(func(params daily.DestroyOneParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation DailyDestroyOne has not yet been implemented")
 		}),
 		DailyGetDailyHandler: daily.GetDailyHandlerFunc(func(params daily.GetDailyParams) middleware.Responder {
 			return middleware.NotImplemented("operation DailyGetDaily has not yet been implemented")
 		}),
-		DailyUpdateOneHandler: daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal interface{}) middleware.Responder {
+		DailyUpdateOneHandler: daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation DailyUpdateOne has not yet been implemented")
 		}),
 
 		// Applies when the "x-token" header is set
-		KeyAuth: func(token string) (interface{}, error) {
+		KeyAuth: func(token string) (*models.Principal, error) {
 			return nil, errors.NotImplemented("api key auth (key) x-token from header param [x-token] has not yet been implemented")
 		},
 
@@ -92,7 +94,7 @@ type SzerfoldAPI struct {
 
 	// KeyAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key x-token provided in the header
-	KeyAuth func(string) (interface{}, error)
+	KeyAuth func(string) (*models.Principal, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
@@ -209,7 +211,9 @@ func (o *SzerfoldAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) 
 
 		case "key":
 
-			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, o.KeyAuth)
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
+				return o.KeyAuth(token)
+			})
 
 		}
 	}

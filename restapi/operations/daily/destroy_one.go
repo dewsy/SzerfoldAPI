@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "SzerfoldAPI/models"
 )
 
 // DestroyOneHandlerFunc turns a function with the right signature into a destroy one handler
-type DestroyOneHandlerFunc func(DestroyOneParams, interface{}) middleware.Responder
+type DestroyOneHandlerFunc func(DestroyOneParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn DestroyOneHandlerFunc) Handle(params DestroyOneParams, principal interface{}) middleware.Responder {
+func (fn DestroyOneHandlerFunc) Handle(params DestroyOneParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // DestroyOneHandler interface for that can handle valid destroy one params
 type DestroyOneHandler interface {
-	Handle(DestroyOneParams, interface{}) middleware.Responder
+	Handle(DestroyOneParams, *models.Principal) middleware.Responder
 }
 
 // NewDestroyOne creates a new http.Handler for the destroy one operation
@@ -54,9 +56,9 @@ func (o *DestroyOne) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
