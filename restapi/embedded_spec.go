@@ -19,10 +19,12 @@ var (
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
-    "application/keyauth.api.v1+json"
+    "application/keyauth.api.v1+json",
+    "application/json"
   ],
   "produces": [
-    "application/keyauth.api.v1+json"
+    "application/keyauth.api.v1+json",
+    "application/json"
   ],
   "schemes": [
     "http",
@@ -241,10 +243,12 @@ func init() {
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
-    "application/keyauth.api.v1+json"
+    "application/keyauth.api.v1+json",
+    "application/json"
   ],
   "produces": [
-    "application/keyauth.api.v1+json"
+    "application/keyauth.api.v1+json",
+    "application/json"
   ],
   "schemes": [
     "http",

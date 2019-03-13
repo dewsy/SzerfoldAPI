@@ -1,5 +1,7 @@
 // This file is safe to edit. Once it exists it will not be overwritten
 
+// {"message" : "testmessage", "verse" : "testverse", "pray" : "testpray", "title" : testtitle"}
+
 package restapi
 
 import (
@@ -55,7 +57,8 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
 	api.DailyAddOneHandler = daily.AddOneHandlerFunc(func(params daily.AddOneParams, principal *models.Principal) middleware.Responder {
-		return middleware.NotImplemented("operation daily.AddOne has not yet been implemented")
+		addedDaily := own_code.AddNewDaily(*params.Body)
+		return daily.NewAddOneCreated().WithPayload(&addedDaily)
 	})
 	api.DailyDestroyOneHandler = daily.DestroyOneHandlerFunc(func(params daily.DestroyOneParams, principal *models.Principal) middleware.Responder {
 		return middleware.NotImplemented("operation daily.DestroyOne has not yet been implemented")

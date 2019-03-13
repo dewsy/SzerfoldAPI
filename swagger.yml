@@ -9,8 +9,10 @@ schemes:
 basePath: /api
 consumes:
   - application/keyauth.api.v1+json
+  - application/json
 produces:
   - application/keyauth.api.v1+json
+  - application/json
 securityDefinitions:
   key:
     type: apiKey

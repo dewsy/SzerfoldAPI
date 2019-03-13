@@ -86,10 +86,10 @@ type SzerfoldAPI struct {
 	// It has a default implemention in the security package, however you can replace it for your particular usage.
 	BearerAuthenticator func(string, security.ScopedTokenAuthentication) runtime.Authenticator
 
-	// JSONConsumer registers a consumer for a "application/keyauth.api.v1+json" mime type
+	// JSONConsumer registers a consumer for a "application/json" mime type
 	JSONConsumer runtime.Consumer
 
-	// JSONProducer registers a producer for a "application/keyauth.api.v1+json" mime type
+	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
 	// KeyAuth registers a function that takes a token and returns a principal
@@ -235,6 +235,9 @@ func (o *SzerfoldAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consu
 	for _, mt := range mediaTypes {
 		switch mt {
 
+		case "application/json":
+			result["application/json"] = o.JSONConsumer
+
 		case "application/keyauth.api.v1+json":
 			result["application/keyauth.api.v1+json"] = o.JSONConsumer
 
@@ -254,6 +257,9 @@ func (o *SzerfoldAPI) ProducersFor(mediaTypes []string) map[string]runtime.Produ
 	result := make(map[string]runtime.Producer)
 	for _, mt := range mediaTypes {
 		switch mt {
+
+		case "application/json":
+			result["application/json"] = o.JSONProducer
 
 		case "application/keyauth.api.v1+json":
 			result["application/keyauth.api.v1+json"] = o.JSONProducer

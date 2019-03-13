@@ -13,10 +13,10 @@ This is the REST API providing for the Szeretetfoldje daily message app
     Version: 0.1.0
 
     Consumes:
-    - application/keyauth.api.v1+json
+    - application/json
 
     Produces:
-    - application/keyauth.api.v1+json
+    - application/json
 
 swagger:meta
 */
