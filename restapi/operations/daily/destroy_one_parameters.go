@@ -36,11 +36,11 @@ type DestroyOneParams struct {
 	  Required: true
 	  In: path
 	*/
-	ID int64
+	PathID int64
 	/*
 	  In: query
 	*/
-	QueryID *int64
+	ID *int64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -55,12 +55,12 @@ func (o *DestroyOneParams) BindRequest(r *http.Request, route *middleware.Matche
 	qs := runtime.Values(r.URL.Query())
 
 	rID, rhkID, _ := route.Params.GetOK("id")
-	if err := o.bindID(rID, rhkID, route.Formats); err != nil {
+	if err := o.bindPathID(rID, rhkID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
 	qID, qhkID, _ := qs.GetOK("id")
-	if err := o.bindQueryID(qID, qhkID, route.Formats); err != nil {
+	if err := o.bindID(qID, qhkID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -70,8 +70,8 @@ func (o *DestroyOneParams) BindRequest(r *http.Request, route *middleware.Matche
 	return nil
 }
 
-// bindID binds and validates parameter ID from path.
-func (o *DestroyOneParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindPathID binds and validates parameter PathID from path.
+func (o *DestroyOneParams) bindPathID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -84,13 +84,13 @@ func (o *DestroyOneParams) bindID(rawData []string, hasKey bool, formats strfmt.
 	if err != nil {
 		return errors.InvalidType("id", "path", "int64", raw)
 	}
-	o.ID = value
+	o.PathID = value
 
 	return nil
 }
 
-// bindQueryID binds and validates parameter QueryID from query.
-func (o *DestroyOneParams) bindQueryID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindID binds and validates parameter ID from query.
+func (o *DestroyOneParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -106,7 +106,7 @@ func (o *DestroyOneParams) bindQueryID(rawData []string, hasKey bool, formats st
 	if err != nil {
 		return errors.InvalidType("id", "query", "int64", raw)
 	}
-	o.QueryID = &value
+	o.ID = &value
 
 	return nil
 }

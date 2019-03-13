@@ -16,9 +16,9 @@ import (
 
 // DestroyOneURL generates an URL for the destroy one operation
 type DestroyOneURL struct {
-	ID int64
+	PathID int64
 
-	QueryID *int64
+	ID *int64
 
 	_basePath string
 	// avoid unkeyed usage
@@ -46,11 +46,11 @@ func (o *DestroyOneURL) Build() (*url.URL, error) {
 
 	var _path = "/{id}"
 
-	id := swag.FormatInt64(o.ID)
-	if id != "" {
-		_path = strings.Replace(_path, "{id}", id, -1)
+	pathID := swag.FormatInt64(o.PathID)
+	if pathID != "" {
+		_path = strings.Replace(_path, "{id}", pathID, -1)
 	} else {
-		return nil, errors.New("id is required on DestroyOneURL")
+		return nil, errors.New("pathId is required on DestroyOneURL")
 	}
 
 	_basePath := o._basePath
@@ -61,12 +61,12 @@ func (o *DestroyOneURL) Build() (*url.URL, error) {
 
 	qs := make(url.Values)
 
-	var queryID string
-	if o.QueryID != nil {
-		queryID = swag.FormatInt64(*o.QueryID)
+	var id string
+	if o.ID != nil {
+		id = swag.FormatInt64(*o.ID)
 	}
-	if queryID != "" {
-		qs.Set("id", queryID)
+	if id != "" {
+		qs.Set("id", id)
 	}
 
 	_result.RawQuery = qs.Encode()

@@ -1,7 +1,5 @@
 // This file is safe to edit. Once it exists it will not be overwritten
 
-// {"message" : "testmessage", "verse" : "testverse", "pray" : "testpray", "title" : testtitle"}
-
 package restapi
 
 import (
@@ -61,13 +59,16 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 		return daily.NewAddOneCreated().WithPayload(&addedDaily)
 	})
 	api.DailyDestroyOneHandler = daily.DestroyOneHandlerFunc(func(params daily.DestroyOneParams, principal *models.Principal) middleware.Responder {
-		return middleware.NotImplemented("operation daily.DestroyOne has not yet been implemented")
+		own_code.DeleteDailyByID(params.PathID)
+		return daily.NewDestroyOneNoContent()
 	})
 	api.DailyGetDailyHandler = daily.GetDailyHandlerFunc(func(params daily.GetDailyParams) middleware.Responder {
-		return middleware.NotImplemented("operation daily.GetDaily has not yet been implemented")
+		dailies := own_code.GetLatestDailies(params.Since)
+		return daily.NewGetDailyOK().WithPayload(dailies)
 	})
 	api.DailyUpdateOneHandler = daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal *models.Principal) middleware.Responder {
-		return middleware.NotImplemented("operation daily.UpdateOne has not yet been implemented")
+		updatedDaily := own_code.UpdateDaily(*params.Daily, params.ID)
+		return daily.NewUpdateOneOK().WithPayload(&updatedDaily)
 	})
 
 	api.ServerShutdown = func() {}
