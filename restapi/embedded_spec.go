@@ -106,6 +106,26 @@ func init() {
       }
     },
     "/{id}": {
+      "get": {
+        "tags": [
+          "daily"
+        ],
+        "operationId": "getOne",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/daily"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "put": {
         "security": [
           {
@@ -191,6 +211,15 @@ func init() {
         "title"
       ],
       "properties": {
+        "counter": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "date": {
+          "type": "string",
+          "minLength": 1
+        },
         "id": {
           "type": "integer",
           "format": "int64",
@@ -330,6 +359,26 @@ func init() {
       }
     },
     "/{id}": {
+      "get": {
+        "tags": [
+          "daily"
+        ],
+        "operationId": "getOne",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/daily"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "put": {
         "security": [
           {
@@ -415,6 +464,15 @@ func init() {
         "title"
       ],
       "properties": {
+        "counter": {
+          "type": "integer",
+          "format": "int64",
+          "readOnly": true
+        },
+        "date": {
+          "type": "string",
+          "minLength": 1
+        },
         "id": {
           "type": "integer",
           "format": "int64",

@@ -17,6 +17,14 @@ import (
 // swagger:model daily
 type Daily struct {
 
+	// counter
+	// Read Only: true
+	Counter int64 `json:"counter,omitempty"`
+
+	// date
+	// Min Length: 1
+	Date string `json:"date,omitempty"`
+
 	// id
 	// Read Only: true
 	ID int64 `json:"id,omitempty"`
@@ -46,6 +54,10 @@ type Daily struct {
 func (m *Daily) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateDate(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateMessage(formats); err != nil {
 		res = append(res, err)
 	}
@@ -65,6 +77,19 @@ func (m *Daily) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Daily) validateDate(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Date) { // not required
+		return nil
+	}
+
+	if err := validate.MinLength("date", "body", string(m.Date), 1); err != nil {
+		return err
+	}
+
 	return nil
 }
 

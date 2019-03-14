@@ -50,6 +50,9 @@ func NewSzerfoldAPI(spec *loads.Document) *SzerfoldAPI {
 		DailyGetDailyHandler: daily.GetDailyHandlerFunc(func(params daily.GetDailyParams) middleware.Responder {
 			return middleware.NotImplemented("operation DailyGetDaily has not yet been implemented")
 		}),
+		DailyGetOneHandler: daily.GetOneHandlerFunc(func(params daily.GetOneParams) middleware.Responder {
+			return middleware.NotImplemented("operation DailyGetOne has not yet been implemented")
+		}),
 		DailyUpdateOneHandler: daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation DailyUpdateOne has not yet been implemented")
 		}),
@@ -105,6 +108,8 @@ type SzerfoldAPI struct {
 	DailyDestroyOneHandler daily.DestroyOneHandler
 	// DailyGetDailyHandler sets the operation handler for the get daily operation
 	DailyGetDailyHandler daily.GetDailyHandler
+	// DailyGetOneHandler sets the operation handler for the get one operation
+	DailyGetOneHandler daily.GetOneHandler
 	// DailyUpdateOneHandler sets the operation handler for the update one operation
 	DailyUpdateOneHandler daily.UpdateOneHandler
 
@@ -184,6 +189,10 @@ func (o *SzerfoldAPI) Validate() error {
 
 	if o.DailyGetDailyHandler == nil {
 		unregistered = append(unregistered, "daily.GetDailyHandler")
+	}
+
+	if o.DailyGetOneHandler == nil {
+		unregistered = append(unregistered, "daily.GetOneHandler")
 	}
 
 	if o.DailyUpdateOneHandler == nil {
@@ -320,6 +329,11 @@ func (o *SzerfoldAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"][""] = daily.NewGetDaily(o.context, o.DailyGetDailyHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/{id}"] = daily.NewGetOne(o.context, o.DailyGetOneHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)

@@ -67,6 +67,19 @@ paths:
         type: integer
         format: int64
         required: true
+    get:
+      tags:
+        - daily
+      operationId: getOne
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/daily"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
     put:
       security:
         - key: []
@@ -118,6 +131,10 @@ definitions:
         type: integer
         format: int64
         readOnly: true
+      counter:
+        type: integer
+        format: int64
+        readOnly: true
       message:
         type: string
         minLength: 1
@@ -128,6 +145,9 @@ definitions:
         type: string
         minLength: 1
       title:
+        type: string
+        minLength: 1
+      date:
         type: string
         minLength: 1
   error:

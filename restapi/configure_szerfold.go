@@ -70,6 +70,10 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 		updatedDaily := own_code.UpdateDaily(*params.Daily, params.ID)
 		return daily.NewUpdateOneOK().WithPayload(&updatedDaily)
 	})
+	api.DailyGetOneHandler = daily.GetOneHandlerFunc(func(params daily.GetOneParams) middleware.Responder {
+		foundDaily := own_code.GetDailyByID(params.ID)
+		return daily.NewGetOneOK().WithPayload(&foundDaily)
+	})
 
 	api.ServerShutdown = func() {}
 
