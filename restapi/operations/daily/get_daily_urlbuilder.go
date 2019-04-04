@@ -15,6 +15,7 @@ import (
 
 // GetDailyURL generates an URL for the get daily operation
 type GetDailyURL struct {
+	From  *int64
 	Since *int64
 
 	_basePath string
@@ -50,6 +51,14 @@ func (o *GetDailyURL) Build() (*url.URL, error) {
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)
 
 	qs := make(url.Values)
+
+	var from string
+	if o.From != nil {
+		from = swag.FormatInt64(*o.From)
+	}
+	if from != "" {
+		qs.Set("from", from)
+	}
 
 	var since string
 	if o.Since != nil {

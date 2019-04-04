@@ -132,6 +132,34 @@ func updateCounter(id int64) {
 	}
 }
 
+func GetDailiesbyId(from *int64) (dailies []*models.Daily) {
+	db := dbConnect()
+	defer db.Close()
+	rows, err := db.Query("SELECT id, message, pray, title, verse, counter, date FROM dailies WHERE id < $1 ORDER BY id DESC LIMIT 20", from)
+	if err != nil {
+		// handle this error better than this
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		daily := models.Daily{}
+		err = rows.Scan(&daily.ID, &daily.Message, &daily.Pray, &daily.Title, &daily.Verse, &daily.Counter, &daily.Date)
+		if err != nil {
+			// handle this error
+			panic(err)
+		}
+		dailies = append(dailies, &daily)
+		go updateCounter(daily.ID)
+		daily.Counter++
+	}
+	// get any error encountered during iteration
+	err = rows.Err()
+	if err != nil {
+		panic(err)
+	}
+	return
+}
+
 func getDate() (date string) {
 	dateSting := time.Now().Format(time.RFC3339)
 	date = dateSting[:10]

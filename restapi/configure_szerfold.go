@@ -63,7 +63,12 @@ func configureAPI(api *operations.SzerfoldAPI) http.Handler {
 		return daily.NewDestroyOneNoContent()
 	})
 	api.DailyGetDailyHandler = daily.GetDailyHandlerFunc(func(params daily.GetDailyParams) middleware.Responder {
-		dailies := own_code.GetLatestDailies(params.Since)
+		var dailies []*models.Daily
+		if params.Since != nil {
+			dailies = own_code.GetLatestDailies(params.Since)
+		} else {
+			dailies = own_code.GetDailiesbyId(params.From)
+		}
 		return daily.NewGetDailyOK().WithPayload(dailies)
 	})
 	api.DailyUpdateOneHandler = daily.UpdateOneHandlerFunc(func(params daily.UpdateOneParams, principal *models.Principal) middleware.Responder {

@@ -50,6 +50,12 @@ func init() {
             "format": "int64",
             "name": "since",
             "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "from",
+            "in": "query"
           }
         ],
         "responses": {
@@ -302,6 +308,12 @@ func init() {
             "type": "integer",
             "format": "int64",
             "name": "since",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "from",
             "in": "query"
           }
         ],

@@ -35,6 +35,10 @@ type GetDailyParams struct {
 	/*
 	  In: query
 	*/
+	From *int64
+	/*
+	  In: query
+	*/
 	Since *int64
 }
 
@@ -49,6 +53,11 @@ func (o *GetDailyParams) BindRequest(r *http.Request, route *middleware.MatchedR
 
 	qs := runtime.Values(r.URL.Query())
 
+	qFrom, qhkFrom, _ := qs.GetOK("from")
+	if err := o.bindFrom(qFrom, qhkFrom, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	qSince, qhkSince, _ := qs.GetOK("since")
 	if err := o.bindSince(qSince, qhkSince, route.Formats); err != nil {
 		res = append(res, err)
@@ -57,6 +66,28 @@ func (o *GetDailyParams) BindRequest(r *http.Request, route *middleware.MatchedR
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindFrom binds and validates parameter From from query.
+func (o *GetDailyParams) bindFrom(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("from", "query", "int64", raw)
+	}
+	o.From = &value
+
 	return nil
 }
 
