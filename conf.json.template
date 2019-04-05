@@ -1,0 +1,8 @@
+{
+  "Xtoken" :     "password",
+  "DbName" :    "your db name",
+  "DbUser" :   "your db user",
+  "DbPassword" : "your db password",
+  "host" : "localhost",
+  "port" : "5432"
+}
